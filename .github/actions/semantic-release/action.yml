@@ -1,0 +1,23 @@
+name: "Semantic Release Action"
+description: "Run semantic-release"
+inputs:
+  dry-run:
+    description: "Run in dry-run mode"
+    required: false
+    default: "false"
+  github-token:
+    description: "GitHub token for semantic-release"
+    required: true
+  npm-token:
+    description: "NPM token for publishing"
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run semantic release
+      run: bunx semantic-release ${{ inputs.dry-run == 'true' && '--dry-run' || '' }}
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        NPM_TOKEN: ${{ inputs.npm-token }}

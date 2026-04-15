@@ -1,15 +1,16 @@
 {
   "name": "@rewdy/remind-cli",
   "version": "0.1.0",
-  "private": false,
   "description": "Terminal reminders that show up when you open a new shell",
+  "author": "Andrew Meyer <andrew@rewdy.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/rewdy/remind-cli",
   "keywords": [
     "cli",
     "productivity",
     "reminder",
     "terminal"
   ],
-  "license": "MIT",
   "bin": {
     "remind": "./dist/remind"
   },
@@ -24,6 +25,10 @@
     "format": "oxfmt .",
     "typecheck": "tsc --noEmit"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "@clack/prompts": "latest",
     "date-fns": "latest",
@@ -32,9 +37,19 @@
     "react-devtools-core": "latest"
   },
   "devDependencies": {
+    "@commitlint/cli": "20.5.0",
+    "@commitlint/config-conventional": "20.5.0",
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/git": "10.0.1",
     "@types/bun": "latest",
     "@types/react": "latest",
     "oxfmt": "latest",
+    "semantic-release": "25.0.3",
     "typescript": "^5"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
