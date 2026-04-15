@@ -1,4 +1,4 @@
-import { Database } from "bun:sqlite";
+import Database from "better-sqlite3";
 import { join } from "node:path";
 import { mkdirSync } from "node:fs";
 
@@ -11,7 +11,7 @@ mkdirSync(DATA_DIR, { recursive: true });
 export const db = new Database(DB_PATH);
 
 // run migrations
-db.run(`
+db.exec(`
   CREATE TABLE IF NOT EXISTS reminders (
     id          TEXT PRIMARY KEY,
     title       TEXT,
@@ -24,7 +24,7 @@ db.run(`
   )
 `);
 
-db.run(`
+db.exec(`
   CREATE INDEX IF NOT EXISTS idx_reminders_next_show
   ON reminders(next_show) WHERE done = 0
 `);

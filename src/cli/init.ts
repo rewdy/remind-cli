@@ -1,4 +1,5 @@
 import { existsSync, mkdirSync } from "node:fs";
+import { readFile, writeFile } from "node:fs/promises";
 import { confirm, note, cancel, isCancel } from "@clack/prompts";
 import { HOOK_MARKER, ZSH_SNIPPET, BASH_SNIPPET, FISH_SNIPPET } from "../shell/snippets.ts";
 
@@ -43,9 +44,8 @@ export async function runInit(args: string[]): Promise<void> {
 
   // Read existing content
   let existing = "";
-  const file = Bun.file(configPath);
-  if (await file.exists()) {
-    existing = await file.text();
+  if (existsSync(configPath)) {
+    existing = await readFile(configPath, "utf8");
   }
 
   // Idempotency check
@@ -65,7 +65,7 @@ export async function runInit(args: string[]): Promise<void> {
     process.exit(0);
   }
 
-  await Bun.write(configPath, existing + "\n" + snippet);
+  await writeFile(configPath, existing + "\n" + snippet, "utf8");
 
   console.log(`Shell integration added to ${configPath}.`);
   console.log(`Open a new terminal session to activate, or run: source ${configPath}`);

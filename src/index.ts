@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 
 import { runCheck } from "./cli/check";
 import { runManual } from "./cli/manual";
