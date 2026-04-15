@@ -1,5 +1,5 @@
 {
-  "name": "remind-cli",
+  "name": "@rewdy/remind-cli",
   "version": "0.1.0",
   "description": "Terminal reminders that show up when you open a new shell",
   "type": "module",
