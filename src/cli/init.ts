@@ -1,0 +1,63 @@
+import { existsSync, mkdirSync } from "node:fs";
+import { HOOK_MARKER, ZSH_SNIPPET, BASH_SNIPPET, FISH_SNIPPET } from "../shell/snippets.ts";
+
+export async function runInit(args: string[]): Promise<void> {
+  // Determine target shell
+  let shell: string | undefined;
+
+  const shellFlagIndex = args.indexOf("--shell");
+  if (shellFlagIndex !== -1) {
+    shell = args[shellFlagIndex + 1];
+  } else {
+    const envShell = process.env["SHELL"] ?? "";
+    if (envShell.includes("zsh")) {
+      shell = "zsh";
+    } else if (envShell.includes("bash")) {
+      shell = "bash";
+    } else if (envShell.includes("fish")) {
+      shell = "fish";
+    }
+  }
+
+  if (!shell || !["zsh", "bash", "fish"].includes(shell)) {
+    console.error("Error: could not detect shell. Use --shell <zsh|bash|fish>");
+    process.exit(1);
+  }
+
+  const home = process.env["HOME"] ?? "";
+
+  // Determine config file path
+  let configPath: string;
+  if (shell === "zsh") {
+    configPath = `${home}/.zshrc`;
+  } else if (shell === "bash") {
+    const bashrc = `${home}/.bashrc`;
+    configPath = existsSync(bashrc) ? bashrc : `${home}/.bash_profile`;
+  } else {
+    // fish
+    const fishConfigDir = `${home}/.config/fish`;
+    mkdirSync(fishConfigDir, { recursive: true });
+    configPath = `${fishConfigDir}/config.fish`;
+  }
+
+  // Read existing content
+  let existing = "";
+  const file = Bun.file(configPath);
+  if (await file.exists()) {
+    existing = await file.text();
+  }
+
+  // Idempotency check
+  if (existing.includes(HOOK_MARKER)) {
+    console.log(`Shell integration already configured in ${configPath}. Nothing to do.`);
+    return;
+  }
+
+  // Append snippet
+  const snippet =
+    shell === "zsh" ? ZSH_SNIPPET : shell === "bash" ? BASH_SNIPPET : FISH_SNIPPET;
+  await Bun.write(configPath, existing + "\n" + snippet);
+
+  console.log(`Shell integration added to ${configPath}.`);
+  console.log(`Open a new terminal session to activate, or run: source ${configPath}`);
+}
