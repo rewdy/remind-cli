@@ -5,7 +5,13 @@ Terminal reminders that show up when you open a new shell.
 ## Install
 
 ```sh
-npm install -g remind-cli
+npm install -g @rewdy/remind-cli
+```
+
+**Or if you use [mise](https://mise.jdx.dev/) you can do this:**
+
+```sh
+mise use --global npm:@rewdy/remind-cli
 ```
 
 ## Quick Start
