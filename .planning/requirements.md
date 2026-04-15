@@ -32,6 +32,7 @@ reminders (
 ```
 
 `next_show` is the single field queried at shell startup. The check is:
+
 ```sql
 SELECT * FROM reminders WHERE done = 0 AND next_show <= :today
 ```
@@ -41,7 +42,7 @@ SELECT * FROM reminders WHERE done = 0 AND next_show <= :today
 ## Reminder Model
 
 | Field      | Required | Notes                                      |
-|------------|----------|--------------------------------------------|
+| ---------- | -------- | ------------------------------------------ |
 | `body`     | Yes      | The reminder message                       |
 | `title`    | No       | Short optional label                       |
 | `type`     | Yes      | `once` or `recurring`                      |
@@ -52,11 +53,13 @@ SELECT * FROM reminders WHERE done = 0 AND next_show <= :today
 ## Reminder Types & Acknowledgment
 
 ### One-time
+
 - Shows starting on a specified date.
 - **Acknowledge:** sets `done = 1`. Not shown again unless user views archived reminders via `remind list`.
 - **Snooze:** no DB change. Shows again tomorrow when `remind check` runs.
 
 ### Recurring
+
 - Defined by an interval: `daily`, `weekly`, `monthly`, `every N months`.
 - `next_show` is set to the **start of the next interval** from creation:
   - `daily` → tomorrow
@@ -82,7 +85,7 @@ The automatic shell check runs **at most once per day** per the `last_check` fil
 ## Commands
 
 | Command        | Description                                              |
-|----------------|----------------------------------------------------------|
+| -------------- | -------------------------------------------------------- |
 | `remind`       | Manual check: show all due unacknowledged reminders      |
 | `remind add`   | Create a new reminder (interactive prompts or CLI flags) |
 | `remind check` | Shell hook command: once-per-day automatic check         |
@@ -108,6 +111,7 @@ The automatic shell check runs **at most once per day** per the `last_check` fil
 Called by the shell hook at session start. Must be **fast** (target: < 100ms).
 
 **Flow:**
+
 1. Read `~/.remind-cli/last_check`. If value is today's date → exit immediately (no output).
 2. Write today's date to `~/.remind-cli/last_check`.
 3. Query `SELECT * FROM reminders WHERE done = 0 AND next_show <= :today`.
@@ -123,6 +127,7 @@ Called by the shell hook at session start. Must be **fast** (target: < 100ms).
 ### `remind add`
 
 **Interactive mode** (default — uses `@clack/prompts`):
+
 1. Body (required text input)
 2. Title (optional text input, skippable)
 3. Type: once / recurring (select)
@@ -130,6 +135,7 @@ Called by the shell hook at session start. Must be **fast** (target: < 100ms).
 5. If recurring: interval selector (daily / weekly / monthly / every N months)
 
 **Non-interactive mode** (CLI flags):
+
 ```
 remind add --body "Review OKRs" --title "OKRs" --once 2026-05-01
 remind add --body "Team sync prep" --recurring weekly
@@ -143,6 +149,7 @@ remind add --body "Quarterly review" --recurring "every 3 months"
 Adds a hook to the user's shell config that calls `remind check` on every new top-level interactive shell session.
 
 **Supported shells:**
+
 1. `zsh` → appends to `~/.zshrc`
 2. `bash` → appends to `~/.bashrc` (falls back to `~/.bash_profile` if `.bashrc` absent)
 3. `fish` → appends to `~/.config/fish/config.fish`
@@ -154,6 +161,7 @@ Re-running `remind init` is idempotent — checks for existing hook marker befor
 **Injected snippets:**
 
 zsh/bash:
+
 ```sh
 # remind-cli
 if [[ $SHLVL -eq 1 && $- == *i* ]]; then
@@ -162,6 +170,7 @@ fi
 ```
 
 fish:
+
 ```fish
 # remind-cli
 if status is-interactive && status is-login
@@ -176,6 +185,7 @@ end
 Built with **Ink** (React-based terminal UI).
 
 **Single reminder:**
+
 ```
 ┌─ Reminder ──────────────────────────────┐
 │ Title (if set)                          │
@@ -187,6 +197,7 @@ Built with **Ink** (React-based terminal UI).
 ```
 
 **Multiple reminders:**
+
 ```
 ┌─ 3 Reminders Due ───────────────────────┐
 │ • Title / body preview                  │
@@ -202,6 +213,7 @@ Built with **Ink** (React-based terminal UI).
 "Review individually" loops through each reminder showing the single-reminder UI.
 
 **After snoozing** (any snooze action), display a brief message:
+
 ```
 You can review your reminders anytime by running `remind`.
 ```
@@ -213,17 +225,20 @@ You can review your reminders anytime by running `remind`.
 Built with **Ink**.
 
 **Main screen:**
+
 - Scrollable list of active reminders (title or body preview, next due date, type badge)
 - Keyboard nav: `↑`/`↓` to move, `Enter` to open detail, `d` to delete, `a` to toggle archived view, `q`/`Esc` to quit
 - Toggle to show archived reminders (acknowledged one-time reminders)
 
 **Detail/edit screen:**
+
 - View full body
 - Edit title, body, schedule
 - Delete with confirmation prompt
 - `Esc`/`b` to go back
 
 **Post-MVP:**
+
 - Shortcut to launch `remind add` flow from within TUI
 - Shortcut to run `remind init` from within TUI
 
@@ -232,6 +247,7 @@ Built with **Ink**.
 ## Shell Integration Details
 
 Top-level interactive shell only. The SHLVL/interactive guards prevent the hook from firing in:
+
 - Nested shells
 - tmux/screen panes opened from an existing shell (SHLVL > 1)
 - Non-interactive subshells (scripts, CI, etc.)
@@ -249,6 +265,7 @@ npm install -g remind-cli
 Built with `bun build --compile` → single self-contained binary. Users need neither Bun nor Node installed.
 
 **Local development:**
+
 ```
 bun run dev    # run from source via bun
 bun run build  # compile binary
@@ -258,17 +275,17 @@ bun run build  # compile binary
 
 ## Tech Stack
 
-| Concern       | Choice                        |
-|---------------|-------------------------------|
-| Runtime       | Bun                           |
-| Language      | TypeScript                    |
-| Database      | SQLite (`bun:sqlite`)         |
-| IDs           | `crypto.randomUUID()`         |
-| Dates         | `date-fns`                    |
-| Prompts       | `@clack/prompts`              |
-| TUI           | `ink` + `react`               |
-| Formatting    | `oxfmt`                       |
-| Distribution  | `bun build --compile` → npm   |
+| Concern      | Choice                      |
+| ------------ | --------------------------- |
+| Runtime      | Bun                         |
+| Language     | TypeScript                  |
+| Database     | SQLite (`bun:sqlite`)       |
+| IDs          | `crypto.randomUUID()`       |
+| Dates        | `date-fns`                  |
+| Prompts      | `@clack/prompts`            |
+| TUI          | `ink` + `react`             |
+| Formatting   | `oxfmt`                     |
+| Distribution | `bun build --compile` → npm |
 
 ---
 

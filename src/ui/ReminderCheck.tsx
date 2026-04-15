@@ -17,7 +17,7 @@ export function ReminderCheck({ reminders }: Props) {
   const [mode, setMode] = useState<Mode>(
     reminders.length === 1
       ? { type: "single", reminderIndex: 0, selectedAction: 0 }
-      : { type: "multi", selectedIndex: 0 }
+      : { type: "multi", selectedIndex: 0 },
   );
 
   useEffect(() => {
@@ -72,8 +72,7 @@ export function ReminderCheck({ reminders }: Props) {
     return (
       <Box paddingX={2} paddingY={1}>
         <Text>
-          Snoozed. You can review your reminders anytime by running{" "}
-          <Text bold>`remind`</Text>.
+          Snoozed. You can review your reminders anytime by running <Text bold>`remind`</Text>.
         </Text>
       </Box>
     );
@@ -87,7 +86,8 @@ export function ReminderCheck({ reminders }: Props) {
         <Box marginTop={1} flexDirection="column">
           {reminders.map((r) => (
             <Text key={r.id}>
-              {"• "}{r.title ?? (r.body.length > 60 ? r.body.slice(0, 60) + "…" : r.body)}
+              {"• "}
+              {r.title ?? (r.body.length > 60 ? r.body.slice(0, 60) + "…" : r.body)}
             </Text>
           ))}
         </Box>

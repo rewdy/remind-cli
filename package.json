@@ -1,15 +1,22 @@
 {
   "name": "@rewdy/remind-cli",
   "version": "0.1.0",
-  "description": "Terminal reminders that show up when you open a new shell",
-  "type": "module",
   "private": false,
+  "description": "Terminal reminders that show up when you open a new shell",
+  "keywords": [
+    "cli",
+    "productivity",
+    "reminder",
+    "terminal"
+  ],
+  "license": "MIT",
   "bin": {
     "remind": "./dist/remind"
   },
   "files": [
     "dist/remind"
   ],
+  "type": "module",
   "scripts": {
     "dev": "bun run src/index.ts",
     "build": "bun build --compile --target=bun src/index.ts --outfile dist/remind",
@@ -17,8 +24,6 @@
     "format": "oxfmt .",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": ["cli", "reminder", "terminal", "productivity"],
-  "license": "MIT",
   "dependencies": {
     "@clack/prompts": "latest",
     "date-fns": "latest",

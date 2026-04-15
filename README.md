@@ -33,13 +33,13 @@ Run `remind` at any time to manually check for due reminders.
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `remind` | Show due reminders |
-| `remind add` | Create a reminder (interactive or via flags) |
-| `remind list` | Browse, edit, and delete reminders |
-| `remind init` | Set up shell integration |
-| `remind check` | Internal — called by shell hook |
+| Command        | Description                                  |
+| -------------- | -------------------------------------------- |
+| `remind`       | Show due reminders                           |
+| `remind add`   | Create a reminder (interactive or via flags) |
+| `remind list`  | Browse, edit, and delete reminders           |
+| `remind init`  | Set up shell integration                     |
+| `remind check` | Internal — called by shell hook              |
 
 ## Recurring intervals
 

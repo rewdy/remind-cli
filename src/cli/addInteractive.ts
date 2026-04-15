@@ -101,8 +101,7 @@ export async function runAddInteractive(): Promise<void> {
   }
 
   const id = randomUUID();
-  const title =
-    typeof titleResult === "string" && titleResult.trim() ? titleResult.trim() : null;
+  const title = typeof titleResult === "string" && titleResult.trim() ? titleResult.trim() : null;
   const schedule = type === "once" ? (date as string) : (interval as Interval);
   const next_show = type === "once" ? (date as string) : computeNextShow(interval as Interval);
   const created_at = new Date().toISOString();

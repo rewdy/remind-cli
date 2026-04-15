@@ -7,7 +7,7 @@ export async function runList(): Promise<void> {
   const active = getAllActive();
   const archived = getArchived();
   const { waitUntilExit } = render(
-    React.createElement(ReminderList, { initialActive: active, initialArchived: archived })
+    React.createElement(ReminderList, { initialActive: active, initialArchived: archived }),
   );
   await waitUntilExit();
 }

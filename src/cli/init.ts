@@ -55,8 +55,7 @@ export async function runInit(args: string[]): Promise<void> {
   }
 
   // Show preview and confirm
-  const snippet =
-    shell === "zsh" ? ZSH_SNIPPET : shell === "bash" ? BASH_SNIPPET : FISH_SNIPPET;
+  const snippet = shell === "zsh" ? ZSH_SNIPPET : shell === "bash" ? BASH_SNIPPET : FISH_SNIPPET;
 
   note(snippet.trim(), `The following will be added to ${configPath}`);
 

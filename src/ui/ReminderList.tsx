@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { Box, Text, useInput, useApp } from "ink";
-import {
-  type Reminder,
-  getAllActive,
-  getArchived,
-  deleteReminder,
-} from "../db/reminders";
+import { type Reminder, getAllActive, getArchived, deleteReminder } from "../db/reminders";
 import { formatDate } from "../utils/dates";
 
 interface Props {
@@ -75,9 +70,7 @@ export function ReminderList({ initialActive, initialArchived }: Props) {
   const [detailAction, setDetailAction] = useState(0);
   const [detailDeleteConfirm, setDetailDeleteConfirm] = useState(false);
 
-  const visibleRows: Reminder[] = showArchived
-    ? [...active, ...archived]
-    : [...active];
+  const visibleRows: Reminder[] = showArchived ? [...active, ...archived] : [...active];
 
   const totalRows = visibleRows.length;
 
@@ -85,7 +78,7 @@ export function ReminderList({ initialActive, initialArchived }: Props) {
     selectedIndex < totalRows ? (visibleRows[selectedIndex] ?? null) : null;
 
   const detailReminder =
-    detailId != null ? [...active, ...archived].find((r) => r.id === detailId) ?? null : null;
+    detailId != null ? ([...active, ...archived].find((r) => r.id === detailId) ?? null) : null;
 
   function refreshData() {
     const newActive = getAllActive();
@@ -102,9 +95,7 @@ export function ReminderList({ initialActive, initialArchived }: Props) {
           deleteReminder(selectedReminder.id);
           const { newActive, newArchived } = refreshData();
           setDeleteConfirm(false);
-          const newVisible = showArchived
-            ? [...newActive, ...newArchived]
-            : [...newActive];
+          const newVisible = showArchived ? [...newActive, ...newArchived] : [...newActive];
           const newMax = newVisible.length - 1;
           if (selectedIndex > newMax) {
             setSelectedIndex(Math.max(0, newMax));
@@ -223,7 +214,8 @@ function ListScreen({
   const TITLE_W = 45;
   const DUE_W = 14;
 
-  const pad = (s: string, w: number) => s.length >= w ? s.slice(0, w) : s + " ".repeat(w - s.length);
+  const pad = (s: string, w: number) =>
+    s.length >= w ? s.slice(0, w) : s + " ".repeat(w - s.length);
 
   return (
     <Box flexDirection="column" paddingTop={1} paddingLeft={2} paddingRight={2}>
@@ -231,7 +223,8 @@ function ListScreen({
       <Box justifyContent="space-between" marginBottom={1}>
         <Text bold>remind list</Text>
         <Text dimColor>
-          {showArchived ? "[a] hide archived" : "[a] archived"}{"  "}[q] quit
+          {showArchived ? "[a] hide archived" : "[a] archived"}
+          {"  "}[q] quit
         </Text>
       </Box>
 
@@ -258,8 +251,7 @@ function ListScreen({
             const isSelected = i === selectedIndex;
             const prefix = isSelected ? "▶ " : "  ";
             // Show archived separator: first archived row when showArchived is true
-            const isFirstArchived =
-              showArchived && i === active.length && archived.length > 0;
+            const isFirstArchived = showArchived && i === active.length && archived.length > 0;
 
             return (
               <React.Fragment key={r.id}>
@@ -271,8 +263,10 @@ function ListScreen({
                 <Box>
                   <Text bold={isSelected}>
                     {prefix}
-                    {pad(typeLabel(r), TYPE_W - 2)}{"  "}
-                    {pad(titlePreview(r), TITLE_W - 2)}{"  "}
+                    {pad(typeLabel(r), TYPE_W - 2)}
+                    {"  "}
+                    {pad(titlePreview(r), TITLE_W - 2)}
+                    {"  "}
                     {r.done === 0 ? formatDate(r.next_show) : ""}
                   </Text>
                 </Box>
@@ -285,9 +279,7 @@ function ListScreen({
       {/* Delete confirmation */}
       {deleteConfirm && selectedReminder != null && (
         <Box marginTop={1}>
-          <Text>
-            Delete "{titlePreview(selectedReminder)}"? Press{" "}
-          </Text>
+          <Text>Delete "{titlePreview(selectedReminder)}"? Press </Text>
           <Text bold>d</Text>
           <Text> again to confirm, any other key to cancel.</Text>
         </Box>
@@ -295,9 +287,7 @@ function ListScreen({
 
       {/* Footer hints */}
       <Box marginTop={1}>
-        <Text dimColor>
-          ↑↓ navigate · Enter view · d delete · a toggle archived · q quit
-        </Text>
+        <Text dimColor>↑↓ navigate · Enter view · d delete · a toggle archived · q quit</Text>
       </Box>
     </Box>
   );
@@ -321,10 +311,7 @@ function DetailScreen({ reminder, selectedAction, deleteConfirm }: DetailScreenP
   const isArchived = reminder.done === 1;
   const bodyLines = wrapText(reminder.body, 50);
 
-  const typeDisplay =
-    reminder.type === "once"
-      ? "One-time"
-      : `Recurring — ${reminder.schedule}`;
+  const typeDisplay = reminder.type === "once" ? "One-time" : `Recurring — ${reminder.schedule}`;
 
   const dueDisplay = reminder.done === 0 ? formatDate(reminder.next_show) : "—";
   const statusDisplay = isArchived ? "Done" : "Active";
@@ -333,7 +320,10 @@ function DetailScreen({ reminder, selectedAction, deleteConfirm }: DetailScreenP
   const innerW = BOX_W - 4; // 2 spaces each side
 
   function line(content: string) {
-    const padded = content.length < innerW ? content + " ".repeat(innerW - content.length) : content.slice(0, innerW);
+    const padded =
+      content.length < innerW
+        ? content + " ".repeat(innerW - content.length)
+        : content.slice(0, innerW);
     return `  ${padded}  `;
   }
 
@@ -344,15 +334,11 @@ function DetailScreen({ reminder, selectedAction, deleteConfirm }: DetailScreenP
       <Text>{"╭─ Reminder " + "─".repeat(BOX_W - 12) + "╮"}</Text>
       <Text>{`│${blankLine}│`}</Text>
 
-      {reminder.title != null && (
-        <Text>{`│${line("  Title:  " + reminder.title)}│`}</Text>
-      )}
+      {reminder.title != null && <Text>{`│${line("  Title:  " + reminder.title)}│`}</Text>}
 
       {/* Body lines */}
       {bodyLines.map((bl, i) => (
-        <Text key={i}>
-          {`│${line(i === 0 ? "  Body:   " + bl : "           " + bl)}│`}
-        </Text>
+        <Text key={i}>{`│${line(i === 0 ? "  Body:   " + bl : "           " + bl)}│`}</Text>
       ))}
 
       <Text>{`│${line("  Type:   " + typeDisplay)}│`}</Text>
@@ -367,13 +353,17 @@ function DetailScreen({ reminder, selectedAction, deleteConfirm }: DetailScreenP
             {"│"}
             {"  "}
             {selectedAction === 0 ? (
-              <Text bold underline>{"[Delete]"}</Text>
+              <Text bold underline>
+                {"[Delete]"}
+              </Text>
             ) : (
               <Text dimColor>{"[Delete]"}</Text>
             )}
             {"  "}
             {selectedAction === 1 ? (
-              <Text bold underline>{"[Back]"}</Text>
+              <Text bold underline>
+                {"[Back]"}
+              </Text>
             ) : (
               <Text dimColor>{"[Back]"}</Text>
             )}
@@ -386,7 +376,9 @@ function DetailScreen({ reminder, selectedAction, deleteConfirm }: DetailScreenP
           {"│"}
           {"  "}
           {selectedAction === 1 ? (
-            <Text bold underline>{"[Back]"}</Text>
+            <Text bold underline>
+              {"[Back]"}
+            </Text>
           ) : (
             <Text dimColor>{"[Back]"}</Text>
           )}
@@ -410,9 +402,7 @@ function DetailScreen({ reminder, selectedAction, deleteConfirm }: DetailScreenP
       {/* Hint */}
       <Box marginTop={1}>
         <Text dimColor>
-          {isArchived
-            ? "Esc/b back"
-            : "← → navigate · Enter select · Esc/b back"}
+          {isArchived ? "Esc/b back" : "← → navigate · Enter select · Esc/b back"}
         </Text>
       </Box>
     </Box>

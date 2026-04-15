@@ -50,9 +50,7 @@ export function runAddFlags(args: string[]): void {
   }
 
   if (!once && !recurring) {
-    process.stderr.write(
-      "Error: specify either --once <date> or --recurring <interval>\n"
-    );
+    process.stderr.write("Error: specify either --once <date> or --recurring <interval>\n");
     process.exit(1);
   }
 
@@ -63,22 +61,18 @@ export function runAddFlags(args: string[]): void {
 
   if (once) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(once) || !isValid(parseISO(once))) {
-      process.stderr.write(
-        `Error: invalid date "${once}" — use YYYY-MM-DD format\n`
-      );
+      process.stderr.write(`Error: invalid date "${once}" — use YYYY-MM-DD format\n`);
       process.exit(1);
     }
     if (once < todayString()) {
-      process.stderr.write(
-        `Error: invalid date "${once}" — use YYYY-MM-DD format\n`
-      );
+      process.stderr.write(`Error: invalid date "${once}" — use YYYY-MM-DD format\n`);
       process.exit(1);
     }
   }
 
   if (recurring && !(VALID_INTERVALS as string[]).includes(recurring)) {
     process.stderr.write(
-      `Error: invalid interval "${recurring}"\nValid intervals: ${VALID_INTERVALS.join(", ")}\n`
+      `Error: invalid interval "${recurring}"\nValid intervals: ${VALID_INTERVALS.join(", ")}\n`,
     );
     process.exit(1);
   }
