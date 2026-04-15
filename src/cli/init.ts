@@ -1,4 +1,5 @@
 import { existsSync, mkdirSync } from "node:fs";
+import { confirm, note, cancel, isCancel } from "@clack/prompts";
 import { HOOK_MARKER, ZSH_SNIPPET, BASH_SNIPPET, FISH_SNIPPET } from "../shell/snippets.ts";
 
 export async function runInit(args: string[]): Promise<void> {
@@ -53,9 +54,18 @@ export async function runInit(args: string[]): Promise<void> {
     return;
   }
 
-  // Append snippet
+  // Show preview and confirm
   const snippet =
     shell === "zsh" ? ZSH_SNIPPET : shell === "bash" ? BASH_SNIPPET : FISH_SNIPPET;
+
+  note(snippet.trim(), `The following will be added to ${configPath}`);
+
+  const confirmed = await confirm({ message: "Continue?" });
+  if (isCancel(confirmed) || !confirmed) {
+    cancel("Cancelled.");
+    process.exit(0);
+  }
+
   await Bun.write(configPath, existing + "\n" + snippet);
 
   console.log(`Shell integration added to ${configPath}.`);
