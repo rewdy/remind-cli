@@ -12,18 +12,21 @@
     "terminal"
   ],
   "bin": {
-    "remind": "./dist/remind"
+    "remind": "./dist/remind.js"
   },
   "files": [
-    "dist/remind"
+    "dist/"
   ],
   "type": "module",
   "scripts": {
     "dev": "bun run src/index.ts",
-    "build": "bun build --compile --target=bun src/index.ts --outfile dist/remind",
+    "build": "node esbuild.config.mjs",
     "test": "bun test",
     "format": "oxfmt .",
     "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "publishConfig": {
     "access": "public",
@@ -31,6 +34,7 @@
   },
   "dependencies": {
     "@clack/prompts": "latest",
+    "better-sqlite3": "12.9.0",
     "date-fns": "latest",
     "ink": "latest",
     "react": "latest",
@@ -41,8 +45,10 @@
     "@commitlint/config-conventional": "20.5.0",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
+    "@types/better-sqlite3": "7.6.13",
     "@types/bun": "latest",
     "@types/react": "latest",
+    "esbuild": "0.28.0",
     "oxfmt": "latest",
     "semantic-release": "25.0.3",
     "typescript": "^5"
