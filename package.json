@@ -5,6 +5,10 @@
   "author": "Andrew Meyer <andrew@rewdy.com>",
   "license": "MIT",
   "homepage": "https://github.com/rewdy/remind-cli",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rewdy/remind-cli.git"
+  },
   "keywords": [
     "cli",
     "productivity",
@@ -12,7 +16,7 @@
     "terminal"
   ],
   "bin": {
-    "remind": "./dist/remind.js"
+    "remind": "dist/remind.js"
   },
   "files": [
     "dist/"
