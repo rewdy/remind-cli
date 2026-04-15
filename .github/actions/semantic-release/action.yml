@@ -16,7 +16,7 @@ runs:
   using: "composite"
   steps:
     - name: Run semantic release
-      run: bunx semantic-release ${{ inputs.dry-run == 'true' && '--dry-run' || '' }}
+      run: bunx semantic-release ${{ inputs.dry-run == 'true' && '--dry-run --no-ci' || '' }}
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
