@@ -1,0 +1,27 @@
+{
+  "name": "remind-cli",
+  "version": "0.1.0",
+  "type": "module",
+  "private": false,
+  "bin": {
+    "remind": "./src/index.ts"
+  },
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "build": "bun build --compile src/index.ts --outfile dist/remind",
+    "test": "bun test",
+    "format": "oxfmt ."
+  },
+  "dependencies": {
+    "@clack/prompts": "latest",
+    "date-fns": "latest",
+    "ink": "latest",
+    "react": "latest"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "latest",
+    "oxfmt": "latest",
+    "typescript": "^5"
+  }
+}
