@@ -14,7 +14,8 @@
     "dev": "bun run src/index.ts",
     "build": "bun build --compile --target=bun src/index.ts --outfile dist/remind",
     "test": "bun test",
-    "format": "oxfmt ."
+    "format": "oxfmt .",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": ["cli", "reminder", "terminal", "productivity"],
   "license": "MIT",
