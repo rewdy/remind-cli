@@ -30,7 +30,7 @@
     "typecheck": "tsc --noEmit"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.13"
   },
   "publishConfig": {
     "access": "public",
@@ -38,7 +38,6 @@
   },
   "dependencies": {
     "@clack/prompts": "latest",
-    "better-sqlite3": "12.9.0",
     "date-fns": "latest",
     "ink": "latest",
     "react": "latest",
@@ -49,7 +48,6 @@
     "@commitlint/config-conventional": "20.5.0",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "@types/better-sqlite3": "7.6.13",
     "@types/bun": "latest",
     "@types/react": "latest",
     "esbuild": "0.28.0",
