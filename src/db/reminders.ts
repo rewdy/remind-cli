@@ -14,7 +14,9 @@ export interface Reminder {
 
 export function getDueReminders(today: string): Reminder[] {
   return db
-    .prepare<[string], Reminder>("SELECT * FROM reminders WHERE done = 0 AND next_show <= ? ORDER BY next_show ASC")
+    .prepare<[string], Reminder>(
+      "SELECT * FROM reminders WHERE done = 0 AND next_show <= ? ORDER BY next_show ASC",
+    )
     .all(today);
 }
 
@@ -42,7 +44,15 @@ export function createReminder(data: {
   db.prepare(
     `INSERT INTO reminders (id, title, body, type, schedule, next_show, created_at, done)
      VALUES (?, ?, ?, ?, ?, ?, ?, 0)`,
-  ).run(data.id, data.title ?? null, data.body, data.type, data.schedule, data.next_show, data.created_at);
+  ).run(
+    data.id,
+    data.title ?? null,
+    data.body,
+    data.type,
+    data.schedule,
+    data.next_show,
+    data.created_at,
+  );
 }
 
 export function acknowledgeReminder(id: string): void {

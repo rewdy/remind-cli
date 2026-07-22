@@ -1,23 +1,9 @@
-import { intro, outro, text, select, confirm, cancel, isCancel } from "@clack/prompts";
+import { intro, outro, text, select, confirm, cancel, isCancel, date } from "@clack/prompts";
 import { randomUUID } from "crypto";
-import { parseISO, isValid } from "date-fns";
+import { format, startOfDay } from "date-fns";
 import { createReminder } from "../db/reminders";
-import { computeNextShow, todayString } from "../utils/dates";
+import { computeNextShow } from "../utils/dates";
 import type { Interval } from "../utils/dates";
-
-function validateDate(value: string | undefined): string | undefined {
-  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-    return "Date must be in YYYY-MM-DD format (e.g. 2026-05-01)";
-  }
-  const parsed = parseISO(value);
-  if (!isValid(parsed)) {
-    return "Invalid date — please enter a real date";
-  }
-  if (value < todayString()) {
-    return "Date must not be in the past";
-  }
-  return undefined;
-}
 
 export async function runAddInteractive(): Promise<void> {
   intro("Create a reminder");
@@ -56,14 +42,16 @@ export async function runAddInteractive(): Promise<void> {
     process.exit(0);
   }
 
-  let date: string | undefined;
+  let dateValue: string | undefined;
   let interval: Interval | undefined;
 
   if (type === "once") {
-    const dateResult = await text({
+    const today = startOfDay(new Date());
+    const dateResult = await date({
       message: "Show on date",
-      placeholder: "YYYY-MM-DD, e.g. 2026-05-01",
-      validate: validateDate,
+      format: "YMD",
+      initialValue: today,
+      minDate: today,
     });
 
     if (isCancel(dateResult)) {
@@ -71,7 +59,7 @@ export async function runAddInteractive(): Promise<void> {
       process.exit(0);
     }
 
-    date = dateResult as string;
+    dateValue = format(dateResult as Date, "yyyy-MM-dd");
   } else {
     const intervalResult = await select<Interval>({
       message: "Repeat every...",
@@ -102,8 +90,8 @@ export async function runAddInteractive(): Promise<void> {
 
   const id = randomUUID();
   const title = typeof titleResult === "string" && titleResult.trim() ? titleResult.trim() : null;
-  const schedule = type === "once" ? (date as string) : (interval as Interval);
-  const next_show = type === "once" ? (date as string) : computeNextShow(interval as Interval);
+  const schedule = type === "once" ? (dateValue as string) : (interval as Interval);
+  const next_show = type === "once" ? (dateValue as string) : computeNextShow(interval as Interval);
   const created_at = new Date().toISOString();
 
   createReminder({

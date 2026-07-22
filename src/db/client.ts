@@ -8,7 +8,7 @@ import { createRequire } from "node:module";
 // this one) before the module is required.
 const originalEmitWarning = process.emitWarning.bind(process);
 process.emitWarning = ((warning: string | Error, ...rest: unknown[]) => {
-  const message = typeof warning === "string" ? warning : warning?.message ?? "";
+  const message = typeof warning === "string" ? warning : (warning?.message ?? "");
   if (message.includes("SQLite is an experimental feature")) return;
   return (originalEmitWarning as (...a: unknown[]) => void)(warning, ...rest);
 }) as typeof process.emitWarning;
