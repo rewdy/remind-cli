@@ -2,19 +2,19 @@
   "name": "@rewdy/remind-cli",
   "version": "0.1.0",
   "description": "Terminal reminders that show up when you open a new shell",
-  "author": "Andrew Meyer <andrew@rewdy.com>",
-  "license": "MIT",
-  "homepage": "https://github.com/rewdy/remind-cli",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rewdy/remind-cli.git"
-  },
   "keywords": [
     "cli",
     "productivity",
     "reminder",
     "terminal"
   ],
+  "homepage": "https://github.com/rewdy/remind-cli",
+  "license": "MIT",
+  "author": "Andrew Meyer <andrew@rewdy.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rewdy/remind-cli.git"
+  },
   "bin": {
     "remind": "dist/remind.js"
   },
@@ -22,19 +22,16 @@
     "dist/"
   ],
   "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "dev": "bun run src/index.ts",
     "build": "node esbuild.config.mjs",
     "test": "bun test",
     "format": "oxfmt .",
     "typecheck": "tsc --noEmit"
-  },
-  "engines": {
-    "node": ">=22.13"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
     "@clack/prompts": "latest",
@@ -59,5 +56,8 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
+  },
+  "engines": {
+    "node": ">=22.13"
   }
 }
